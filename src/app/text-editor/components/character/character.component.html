@@ -1,0 +1,5 @@
+<ng-container [ngSwitch]="character">
+  <span *ngSwitchCase="' '">&nbsp;</span>
+  <span *ngSwitchCase="'Tab'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  <span *ngSwitchDefault>{{ character }}</span>
+</ng-container>

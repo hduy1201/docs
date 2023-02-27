@@ -1,0 +1,39 @@
+.paper {
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto;
+  display: grid;
+  grid-template: auto 1fr auto / auto 1fr auto;
+}
+
+.paper-header {
+  grid-column: 1 / 4;
+  height: 1in;
+}
+
+.paper-content {
+  grid-column: 2 / 3;
+  width: 100%;
+  flex-wrap: wrap;
+  display: flex;
+  align-content: flex-start;
+  flex-direction: column;
+  // justify-content: flex-end;
+}
+
+.paper-left {
+  grid-column: 1 / 2;
+  width: 1in;
+}
+
+.paper-right {
+  grid-column: 3 / 4;
+  width: 1in;
+}
+
+.paper-footer {
+  grid-column: 1 / 4;
+  height: 1in;
+}

@@ -1,0 +1,14 @@
+<div class="paper">
+  <div class="paper-header"></div>
+  <div class="paper-left"></div>
+  <div class="paper-content">
+    <text-editor-paragraph
+      *ngFor="let paragraph of paragraphs; let i = index"
+      [characters]="paragraph"
+      [id]="i"
+      (selectedIndex)="onSelectParagraph($event)"
+    ></text-editor-paragraph>
+  </div>
+  <div class="paper-right"></div>
+  <div class="paper-footer"></div>
+</div>
