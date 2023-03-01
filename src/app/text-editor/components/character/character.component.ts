@@ -18,11 +18,10 @@ export class CharacterComponent {
 
   @Output() selectedCharacterId = new EventEmitter<number>();
 
-  @Input() cursorPosition: number = 0;
 
   @HostListener('click', ['$event'])
   click(event: MouseEvent) {
-    console.log(this.id);
+    console.log("Click at: " + this.id);
     this.selectedCharacterId.emit(this.id);
     this.store.dispatch(changeGlobalSelectedCharacterIndex({ globalSelectedCharacterIndex: this.id }));
   }

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { changeGlobalSelectedParagraphIndex } from 'src/app/ngrx/actions/paragraph.action';
+import { CharacterState } from 'src/app/ngrx/states/character.state';
 import { ParagraphState } from 'src/app/ngrx/states/paragraph.state';
 
 @Component({
@@ -26,6 +27,7 @@ export class ParagraphComponent {
   selectedIndex = new EventEmitter<number>();
 
   selectedParagraphIndex$ = this.store.select('paragraph', 'globalSelectedParagraphIndex');
+  selectedCharacterIndex$ = this.store.select('characters', 'globalSelectedCharacterIndex');
 
   @HostListener('click', ['$event'])
   click(event: MouseEvent) {
@@ -33,10 +35,7 @@ export class ParagraphComponent {
     this.selectedIndex.emit(this.id);
   }
 
-  constructor(private store: Store<{ paragraph: ParagraphState }>) {
-    this.selectedParagraphIndex$.subscribe((paragraphState) => {
-      console.log(paragraphState);
-    });
-  }
+  constructor(private store: Store<{ paragraph: ParagraphState, characters: CharacterState }>) {
 
+  }
 }

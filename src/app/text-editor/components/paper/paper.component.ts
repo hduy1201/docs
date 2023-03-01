@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { changeGlobalSelectedCharacterIndex } from 'src/app/ngrx/actions/character.action';
 import { changeGlobalSelectedParagraphIndex } from 'src/app/ngrx/actions/paragraph.action';
 import { CharacterState } from 'src/app/ngrx/states/character.state';
 import { ParagraphState } from 'src/app/ngrx/states/paragraph.state';
@@ -14,6 +15,8 @@ export class PaperComponent {
   paragraphs = new Array<Array<string>>();
 
   currentParagraphIndex = 0;
+
+  cursorPosition = 0;
 
   // @HostListener('click', ['$event'])
   // click(event: MouseEvent) {
@@ -30,12 +33,21 @@ export class PaperComponent {
 
     if (event.code == 'Backspace') {
       event.preventDefault();
-      this.paragraphs[this.currentParagraphIndex].pop();
-      if (this.paragraphs[this.currentParagraphIndex].length == 0 && this.currentParagraphIndex > 0) {
-        this.paragraphs.splice(this.currentParagraphIndex, 1);
-        this.currentParagraphIndex--;
-        this.store.dispatch(changeGlobalSelectedParagraphIndex({ globalSelectedParagraphIndex: this.currentParagraphIndex }));
+      if (this.cursorPosition == 0) {
+        return;
       }
+      if (this.paragraphs[this.currentParagraphIndex].length != 0) {
+        this.cursorPosition--;
+        this.paragraphs[this.currentParagraphIndex].splice(this.cursorPosition, 1);
+      } else {
+        if (this.currentParagraphIndex != 0) {
+          this.currentParagraphIndex--;
+          this.cursorPosition = this.paragraphs[this.currentParagraphIndex].length;
+          this.store.dispatch(changeGlobalSelectedParagraphIndex({ globalSelectedParagraphIndex: this.currentParagraphIndex }));
+        }
+      }
+      this.store.dispatch(changeGlobalSelectedCharacterIndex({ globalSelectedCharacterIndex: this.cursorPosition }));
+      console.log(this.cursorPosition);
       return;
     }
 
@@ -43,6 +55,8 @@ export class PaperComponent {
       event.preventDefault();
       this.paragraphs.push([]);
       this.currentParagraphIndex++;
+      this.cursorPosition = 0;
+      this.store.dispatch(changeGlobalSelectedCharacterIndex({ globalSelectedCharacterIndex: this.cursorPosition }));
       this.store.dispatch(changeGlobalSelectedParagraphIndex({ globalSelectedParagraphIndex: this.currentParagraphIndex }));
       return;
     }
@@ -103,13 +117,14 @@ export class PaperComponent {
 
     if (event.code == 'Delete') {
       event.preventDefault();
-      this.paragraphs[this.currentParagraphIndex].pop();
-      if (this.paragraphs[this.currentParagraphIndex].length == 0 && this.currentParagraphIndex > 0) {
-        this.paragraphs.splice(this.currentParagraphIndex, 1);
-        this.currentParagraphIndex--;
-        this.store.dispatch(changeGlobalSelectedParagraphIndex({ globalSelectedParagraphIndex: this.currentParagraphIndex }));
-      }
-      return;
+      // this.paragraphs[this.currentParagraphIndex].pop();
+      // if (this.paragraphs[this.currentParagraphIndex].length == 0 && this.currentParagraphIndex > 0) {
+      //   this.paragraphs.splice(this.currentParagraphIndex, 1);
+      //   this.currentParagraphIndex--;
+      //   this.cursorPosition = this.paragraphs[this.currentParagraphIndex].length;
+      //   this.store.dispatch(changeGlobalSelectedParagraphIndex({ globalSelectedParagraphIndex: this.currentParagraphIndex }));
+      // }
+      // return;
     }
 
     if (event.code == 'Insert') {
@@ -122,8 +137,50 @@ export class PaperComponent {
       return;
     }
 
-    this.paragraphs[this.currentParagraphIndex].push(event.key);
+    if (event.code == 'ArrowLeft') {
+      event.preventDefault();
+      if (this.cursorPosition > 0) {
+        this.cursorPosition--;
 
+        this.store.dispatch(changeGlobalSelectedCharacterIndex({ globalSelectedCharacterIndex: this.cursorPosition }));
+      }
+      return;
+    }
+
+    if (event.code == 'ArrowRight') {
+      event.preventDefault();
+      if (this.cursorPosition < this.paragraphs[this.currentParagraphIndex].length) {
+        this.cursorPosition++;
+        this.cursorPosition = this.paragraphs[this.currentParagraphIndex].length;
+        this.store.dispatch(changeGlobalSelectedCharacterIndex({ globalSelectedCharacterIndex: this.cursorPosition }));
+      }
+      return;
+    }
+
+    if (event.code == 'ArrowUp') {
+      event.preventDefault();
+      if (this.currentParagraphIndex > 0) {
+        this.currentParagraphIndex--;
+        this.cursorPosition = this.paragraphs[this.currentParagraphIndex].length;
+        this.store.dispatch(changeGlobalSelectedParagraphIndex({ globalSelectedParagraphIndex: this.currentParagraphIndex }));
+      }
+      return;
+    }
+
+    if (event.code == 'ArrowDown') {
+      event.preventDefault();
+      if (this.currentParagraphIndex < this.paragraphs.length - 1) {
+        this.currentParagraphIndex++;
+        this.cursorPosition = this.paragraphs[this.currentParagraphIndex].length;
+        this.store.dispatch(changeGlobalSelectedParagraphIndex({ globalSelectedParagraphIndex: this.currentParagraphIndex }));
+      }
+      return;
+    }
+
+    this.paragraphs[this.currentParagraphIndex].splice(this.cursorPosition, 0, event.key);
+    this.cursorPosition++;
+    this.store.dispatch(changeGlobalSelectedCharacterIndex({ globalSelectedCharacterIndex: this.cursorPosition }));
+    console.log(this.cursorPosition);
     this.store.dispatch(changeGlobalSelectedParagraphIndex({ globalSelectedParagraphIndex: this.currentParagraphIndex }));
   }
 
@@ -133,10 +190,11 @@ export class PaperComponent {
     this.store.dispatch(changeGlobalSelectedParagraphIndex({ globalSelectedParagraphIndex: this.currentParagraphIndex }));
   }
 
-  constructor(private elemRef: ElementRef, private store: Store<{ character: CharacterState, paragraph: ParagraphState }>) {
+  constructor(private elemRef: ElementRef, private store: Store<{ characters: CharacterState, paragraph: ParagraphState }>) {
     this.paragraphs.push([]);
-    this.store.select('character').subscribe((state) => {
+    this.store.select('characters').subscribe((state) => {
       console.log(state);
+      this.cursorPosition = state.globalSelectedCharacterIndex;
     });
   }
 

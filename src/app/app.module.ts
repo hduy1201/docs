@@ -22,9 +22,6 @@ import { paragraphReducer } from './ngrx/reducers/paragraph.reducer';
       characters: characterReducer,
       paragraph: paragraphReducer
     }, {}),
-    StoreModule.forFeature('text-editor', {
-
-    }, {}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
