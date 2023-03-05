@@ -1,3 +1,9 @@
+.paragraph {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
 .cursor {
   position: absolute;
   background-color: rgb(0, 4, 72);

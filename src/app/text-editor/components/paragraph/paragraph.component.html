@@ -1,10 +1,12 @@
-<ng-container *ngFor="let char of characters; let i = index">
-  <text-editor-character [character]="char" [id]="i"></text-editor-character>
-  <span
-    *ngIf="
-      i == (selectedCharacterIndex$ | async)! - 1 &&
-      (selectedParagraphIndex$ | async) == id
-    "
-    class="cursor"
-  ></span>
-</ng-container>
+<span class="paragraph">
+  <span *ngFor="let char of characters; let i = index">
+    <text-editor-character [character]="char" [id]="i"></text-editor-character>
+    <span
+      *ngIf="
+        i == (selectedCharacterIndex$ | async)! - 1 &&
+        (selectedParagraphIndex$ | async) == id
+      "
+      class="cursor"
+    ></span>
+  </span>
+</span>

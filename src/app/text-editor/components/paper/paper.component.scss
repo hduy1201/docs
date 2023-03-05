@@ -6,6 +6,7 @@
   margin: 0 auto;
   display: grid;
   grid-template: auto 1fr auto / auto 1fr auto;
+  user-select: none;
 }
 
 .paper-header {
@@ -17,10 +18,10 @@
   grid-column: 2 / 3;
   width: 100%;
   flex-wrap: wrap;
-  display: flex;
+  display: inline-block;
   align-content: flex-start;
   flex-direction: column;
-  // justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
 .paper-left {

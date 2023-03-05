@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ParagraphState } from './ngrx/states/paragraph.state';
 
 @Component({
   selector: 'app-root',

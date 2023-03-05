@@ -1,5 +1,7 @@
 <ng-container [ngSwitch]="character">
-  <span *ngSwitchCase="' '">&nbsp;</span>
-  <span *ngSwitchCase="'Tab'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-  <span *ngSwitchDefault>{{ character }}</span>
+  <span *ngSwitchCase="' '" [ngClass]="getClassByPosition()">&nbsp;</span>
+  <span *ngSwitchCase="'Tab'" [ngClass]="getClassByPosition()"
+    >&nbsp;&nbsp;&nbsp;&nbsp;</span
+  >
+  <span *ngSwitchDefault [ngClass]="getClassByPosition()">{{ character }}</span>
 </ng-container>

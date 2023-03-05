@@ -7,8 +7,8 @@ import { TextEditorModule } from './text-editor/text-editor.module';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { characterReducer } from './ngrx/reducers/character.reducer';
-import { paragraphReducer } from './ngrx/reducers/paragraph.reducer';
+import { characterReducer } from './text-editor/ngrx/reducers/character.reducer';
+import { paragraphReducer } from './text-editor/ngrx/reducers/paragraph.reducer';
 
 @NgModule({
   declarations: [
